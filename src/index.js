@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Login } from './screens';
+import Routes from './screens/Routes';
 
 import './index.css';
 
 ReactDOM.render(
-	<Login />,
+	<Routes />,
 	document.getElementById('root')
 );
