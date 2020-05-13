@@ -133,6 +133,18 @@ class Home extends Component {
 
 	}
 
+	timeConverter = (UNIX_timestamp) => {
+		var date = new Date(UNIX_timestamp * 1000);
+		var dd = (date.getDate() < 10 ? '0' : '') + date.getDate();
+		var MM = ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1);
+		var yyyy = date.getFullYear();
+		var hour = date.getHours();
+		var min = date.getMinutes();
+		var sec = date.getSeconds();
+		var time = dd + '/' + MM + '/' + yyyy + ' ' + hour + ':' + min + ':' + sec;
+		return time;
+	}
+
 	render() {
 		const { classes, history } = this.props;
 		let { commentRequired, selectedUserId } = this.state;
@@ -159,7 +171,7 @@ class Home extends Component {
 								let hashtags = text.splice(1);
 								let { comments, user: { username, profile_picture }, created_time } = user;
 
-								return (<Grid item xs={12} sm={6} key={user.created_time}>
+								return (<Grid item xs={12} sm={6} key={user.id}>
 									<Card className={classes.root}>
 										<CardHeader
 											avatar={
@@ -168,7 +180,7 @@ class Home extends Component {
 												</Avatar>
 											}
 											title={username}
-											subheader={new Date(parseInt(created_time)).toLocaleString()}
+											subheader={this.timeConverter(parseInt(created_time))}
 										/>
 
 										<CardContent>
