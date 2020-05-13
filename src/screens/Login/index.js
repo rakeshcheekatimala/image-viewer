@@ -51,6 +51,7 @@ class Login extends Component {
 		if (username === matchCredentials.username && password === matchCredentials.password) {
 			sessionStorage.setItem('access-token', accessToken)
 			this.setState({ loggedIn: true, credentialsMismatchError: "dispNone" });
+			this.props.history.push("/home");
 		}
 		else {
 			this.setState({ credentialsMismatchError: "dispBlock" })
@@ -76,14 +77,14 @@ class Login extends Component {
 							<FormControl required>
 								<InputLabel htmlFor="username"> Username </InputLabel>
 								<Input id="username" type="text" username={username} onChange={this.inputUsernameChangeHandler} />
-								<FormHelperText className={styles[usernameRequired]}><span className={styles.red}>required</span></FormHelperText>
+								<FormHelperText className={usernameRequired}><span className="red">required</span></FormHelperText>
 							</FormControl><br /><br />
 							<FormControl required>
 								<InputLabel htmlFor="password"> Password </InputLabel>
 								<Input id="password" type="password" onChange={this.inputPasswordChangeHandler} />
-								<FormHelperText className={styles[passwordRequired]}><span className={styles.red}>required</span></FormHelperText>
+								<FormHelperText className={passwordRequired}><span className="red">required</span></FormHelperText>
 							</FormControl><br />
-							<FormHelperText className={styles[credentialsMismatchError]}><span className={styles.red}>Incorrect username and/or password</span></FormHelperText>
+							<FormHelperText className={credentialsMismatchError}><span className="red">Incorrect username and/or password</span></FormHelperText>
 							<br />
 							<Button variant="contained" color="primary" onClick={this.loginClickHandler} className={classes.login__btn}>LOGIN</Button>
 						</CardContent>
