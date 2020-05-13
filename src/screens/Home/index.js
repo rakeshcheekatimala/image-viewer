@@ -12,7 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-
+import { FormControl, InputLabel, Input, FormHelperText, Button } from '@material-ui/core';
 import { fetchUserMedia } from './../../api';
 
 const useStyles = theme => ({
@@ -43,6 +43,18 @@ const useStyles = theme => ({
 	},
 	fillColor: {
 		color: 'red'
+	},
+	addComment: {
+		display: 'flex',
+		justifyContent: 'space-between'
+	},
+	addCommentFormControl: {
+		flexGrow: 1,
+		display: 'flex',
+		marginRight: '16px'
+	},
+	mb16: {
+		marginBottom: '16px'
 	}
 });
 
@@ -52,7 +64,11 @@ class Home extends Component {
 	constructor() {
 		super();
 		this.state = {
-			userMedia: []
+			userMedia: [],
+			commentRequired: "dispNone",
+			comment: '',
+			comments: [],
+			selectedUserId: ''
 		};
 	}
 	componentWillMount() {
@@ -79,14 +95,47 @@ class Home extends Component {
 			}
 			return modifiedItem;
 		});
-		console.log('items', items)
 		this.setState({
 			userMedia: items
 		});
 	}
 
+	onChangeHandler = (e, id) => {
+		let comment = e.target.value;
+		this.setState({
+			comment: comment,
+			selectedUserId: id
+		})
+	}
+
+	addCommentHandler = (id) => {
+
+		let { comment } = this.state;
+		if (comment.trim() === '') {
+			return;
+		}
+
+		let items = this.state.userMedia.map((item) => {
+			let modifiedItem = item;
+			let comments = { ...item.comments };
+			if (modifiedItem.id === id) {
+				comments.values = comments.values || [];
+				comments.values.push(comment);
+				modifiedItem.comments = comments;
+			}
+			return modifiedItem;
+		});
+
+		this.setState({
+			comment: "",
+			userMedia: items
+		});
+
+	}
+
 	render() {
 		const { classes, history } = this.props;
+		let { commentRequired, selectedUserId } = this.state;
 		let profile_picture = null;
 		if (this.state.userMedia[0]) {
 			let { user } = this.state.userMedia[0];
@@ -97,6 +146,7 @@ class Home extends Component {
 			return <div>Loading....</div>
 		}
 		return (
+
 			<div>
 				<LoggedInHeader profile_picture={profile_picture} history={history} />
 				<Container className={classes.root}>
@@ -107,23 +157,26 @@ class Home extends Component {
 								let text = user.caption.text.split("#");
 								let caption = text[0];
 								let hashtags = text.splice(1);
+								let { comments, user: { username, profile_picture }, created_time } = user;
+
 								return (<Grid item xs={12} sm={6} key={user.created_time}>
 									<Card className={classes.root}>
 										<CardHeader
 											avatar={
 												<Avatar aria-label="recipe" className={classes.avatar}>
-													<img src={user.user.profile_picture} alt="profile" />
+													<img src={profile_picture} alt="profile" />
 												</Avatar>
 											}
-											title={user.user.username}
-											subheader={new Date(parseInt(user.created_time)).toLocaleString()}
+											title={username}
+											subheader={new Date(parseInt(created_time)).toLocaleString()}
 										/>
-										<CardMedia
-											className={classes.media}
-											image={user.images.standard_resolution.url}
-											title="Paella dish"
-										/>
+
 										<CardContent>
+											<CardMedia
+												className={classes.media}
+												image={user.images.standard_resolution.url}
+												title="Paella dish"
+											/>
 											<Typography variant="body2" component="p">
 												{caption}
 											</Typography>
@@ -143,7 +196,26 @@ class Home extends Component {
 											<Typography variant="body2" component="p">
 												{user.likes.count} likes
 											</Typography>
+											<br />
 										</CardActions>
+										<CardContent>
+											{
+												comments.values && comments.values.map((comment, index) => {
+													return (<Typography variant="body2" component="p" key={comment + index + user.id} className={classes.mb16}>
+														{username}: &nbsp; {comment}
+													</Typography>)
+												})
+											}
+											<br /><br />
+											<Grid item xs={12} className={classes.addComment} justify-content="space-between">
+												<FormControl className={classes.addCommentFormControl}>
+													<InputLabel htmlFor="password"> Add a Comment </InputLabel>
+													<Input type="text" onChange={(e) => this.onChangeHandler(e, user.id)} value={selectedUserId === user.id ? this.state.comment : ''} />
+													<FormHelperText className={commentRequired}><span className="red">required</span></FormHelperText>
+												</FormControl>
+												<Button variant="contained" color="primary" onClick={this.addCommentHandler.bind(this, user.id)} className={classes.login__btn}>Add</Button>
+											</Grid>
+										</CardContent>
 									</Card>
 								</Grid>)
 							}))
