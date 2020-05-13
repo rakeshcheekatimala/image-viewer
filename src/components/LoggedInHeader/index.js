@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 		[theme.breakpoints.up('sm')]: {
 			width: '300px',
 			'&:focus': {
-				width: '20ch',
+				width: '300px',
 			},
 		},
 	},
@@ -106,6 +106,7 @@ export default function LoggedInHeader(props) {
 								input: classes.inputInput,
 							}}
 							inputProps={{ 'aria-label': 'search' }}
+							onChange={props.onSearchHandler}
 						/>
 					</div>
 

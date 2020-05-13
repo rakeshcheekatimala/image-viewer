@@ -68,7 +68,8 @@ class Home extends Component {
 			commentRequired: "dispNone",
 			comment: '',
 			comments: [],
-			selectedUserId: ''
+			selectedUserId: '',
+			userProfile: null
 		};
 	}
 	componentWillMount() {
@@ -77,8 +78,7 @@ class Home extends Component {
 
 	loadUserMedia = async () => {
 		let data = await fetchUserMedia();
-		console.log(data)
-		this.setState({ userMedia: data })
+		this.setState({ userMedia: data, userProfile: data[0].user })
 	}
 
 	addFavorite = (id) => {
@@ -105,7 +105,21 @@ class Home extends Component {
 		this.setState({
 			comment: comment,
 			selectedUserId: id
-		})
+		});
+
+	}
+
+	onSearchHandler = (e) => {
+		let searchText = e.target.value
+		let filterMatchedItems = this.state.userMedia.filter((item) => {
+			return item.caption.text.indexOf(searchText) !== -1;
+		});
+		this.setState({
+			userMedia: filterMatchedItems
+		});
+		if (searchText === '') {
+			this.loadUserMedia();
+		}
 	}
 
 	addCommentHandler = (id) => {
@@ -147,11 +161,10 @@ class Home extends Component {
 
 	render() {
 		const { classes, history } = this.props;
-		let { commentRequired, selectedUserId } = this.state;
+		let { commentRequired, selectedUserId, userProfile } = this.state;
 		let profile_picture = null;
-		if (this.state.userMedia[0]) {
-			let { user } = this.state.userMedia[0];
-			profile_picture = user.profile_picture
+		if (userProfile) {
+			profile_picture = userProfile.profile_picture
 		}
 
 		if (!profile_picture) {
@@ -160,7 +173,7 @@ class Home extends Component {
 		return (
 
 			<div>
-				<LoggedInHeader profile_picture={profile_picture} history={history} />
+				<LoggedInHeader profile_picture={profile_picture} history={history} onSearchHandler={this.onSearchHandler.bind(this)} />
 				<Container className={classes.root}>
 					<Grid container spacing={2} >
 
