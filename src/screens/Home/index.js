@@ -2,24 +2,18 @@ import React, { Component } from 'react';
 import { LoggedInHeader } from './../../components';
 
 import { Grid, withStyles, Container } from '@material-ui/core';
-
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 import { fetchUserMedia } from './../../api';
-
-
 
 const useStyles = theme => ({
 	root: {
@@ -43,8 +37,13 @@ const useStyles = theme => ({
 	},
 	expandOpen: {
 		transform: 'rotate(180deg)',
+	},
+	hashtag: {
+		color: 'skyblue'
+	},
+	fillColor: {
+		color: 'red'
 	}
-
 });
 
 
@@ -66,11 +65,40 @@ class Home extends Component {
 		this.setState({ userMedia: data })
 	}
 
+	addFavorite = (id) => {
+		let items = this.state.userMedia.map((item) => {
+			let modifiedItem = item;
+
+			if (!modifiedItem.hasOwnProperty('isFavorite')) {
+				modifiedItem.isFavorite = false;
+			}
+
+			if (modifiedItem.id === id) {
+				modifiedItem.isFavorite = !modifiedItem.isFavorite;
+				modifiedItem.isFavorite ? ++modifiedItem.likes.count : --modifiedItem.likes.count;
+			}
+			return modifiedItem;
+		});
+		console.log('items', items)
+		this.setState({
+			userMedia: items
+		});
+	}
+
 	render() {
-		const { classes } = this.props;
+		const { classes, history } = this.props;
+		let profile_picture = null;
+		if (this.state.userMedia[0]) {
+			let { user } = this.state.userMedia[0];
+			profile_picture = user.profile_picture
+		}
+
+		if (!profile_picture) {
+			return <div>Loading....</div>
+		}
 		return (
 			<div>
-				<LoggedInHeader />
+				<LoggedInHeader profile_picture={profile_picture} history={history} />
 				<Container className={classes.root}>
 					<Grid container spacing={2} >
 
@@ -87,11 +115,6 @@ class Home extends Component {
 													<img src={user.user.profile_picture} alt="profile" />
 												</Avatar>
 											}
-											action={
-												<IconButton aria-label="settings">
-													<MoreVertIcon />
-												</IconButton>
-											}
 											title={user.user.username}
 											subheader={new Date(parseInt(user.created_time)).toLocaleString()}
 										/>
@@ -101,18 +124,25 @@ class Home extends Component {
 											title="Paella dish"
 										/>
 										<CardContent>
-											<Typography variant="body2" color="textSecondary" component="p">
+											<Typography variant="body2" component="p">
 												{caption}
 											</Typography>
+											{
+												hashtags.map((value) => {
+													return (<Typography key={"hashtag" + value} variant="body2" component="span" className={classes.hashtag}>
+														#{value}
+													</Typography>)
+												})
+											}
+
 										</CardContent>
 										<CardActions disableSpacing>
-											<IconButton aria-label="add to favorites">
-												<FavoriteIcon />
+											<IconButton aria-label="add to favorites" onClick={this.addFavorite.bind(this, user.id)}>
+												{user.isFavorite ? <FavoriteIcon className={classes.fillColor} /> : <FavoriteBorderIcon />}
 											</IconButton>
-											<IconButton aria-label="share">
-												<ShareIcon />
-											</IconButton>
-
+											<Typography variant="body2" component="p">
+												{user.likes.count} likes
+											</Typography>
 										</CardActions>
 									</Card>
 								</Grid>)

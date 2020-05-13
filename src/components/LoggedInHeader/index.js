@@ -1,10 +1,9 @@
 import React from 'react';
 import { AppBar, Toolbar, IconButton, Typography, InputBase, Menu, MenuItem } from '@material-ui/core';
-
 import { fade, makeStyles } from '@material-ui/core/styles';
-
 import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import Avatar from '@material-ui/core/Avatar';
+import { userLogout } from './../../common/utils';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -63,19 +62,29 @@ const useStyles = makeStyles((theme) => ({
 			},
 		},
 	},
+	avatar: {
+		width: '35px',
+		height: '35px'
+	}
 }));
 
-export default function LoggedInHeader() {
+export default function LoggedInHeader(props) {
 	const classes = useStyles();
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
-
+	const profile_picture = props.profile_picture;
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
 
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
+	};
+
+	const handleLogout = (event) => {
+		event.preventDefault();
+		userLogout(); // clear all the session token 
+		props.history.push("/"); // back to home
 	};
 
 	return (
@@ -107,7 +116,9 @@ export default function LoggedInHeader() {
 							onClick={handleMenu}
 							color="inherit"
 						>
-							<AccountCircle />
+							{profile_picture ? (<Avatar aria-label="recipe" className={classes.avatar}>
+								<img src={profile_picture} alt="profile" />
+							</Avatar>) : null}
 						</IconButton>
 						<Menu
 							id="menu-appbar"
@@ -125,7 +136,7 @@ export default function LoggedInHeader() {
 							onClose={handleClose}
 						>
 							<MenuItem onClick={handleClose}>Profile</MenuItem>
-							<MenuItem onClick={handleClose}>My account</MenuItem>
+							<MenuItem onClick={handleLogout}>Logout</MenuItem>
 						</Menu>
 					</div>
 
