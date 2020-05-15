@@ -140,7 +140,6 @@ class Profile extends Component {
 
 	loadUserProfile = async () => {
 		let data = await fetchUserProfile();
-		console.log('loadUserProfile', data);
 		this.setState({ userProfile: data })
 	}
 
