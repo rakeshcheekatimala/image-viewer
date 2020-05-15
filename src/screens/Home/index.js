@@ -161,7 +161,7 @@ class Home extends Component {
 
 	render() {
 		const { classes, history } = this.props;
-		let { commentRequired, selectedUserId, userProfile } = this.state;
+		let { commentRequired, selectedUserId, userProfile, userMedia } = this.state;
 		let profile_picture = null;
 		if (userProfile) {
 			profile_picture = userProfile.profile_picture
@@ -171,14 +171,13 @@ class Home extends Component {
 			return <div>Loading....</div>
 		}
 		return (
-
 			<div>
 				<LoggedInHeader profile_picture={profile_picture} history={history} onSearchHandler={this.onSearchHandler.bind(this)} />
 				<Container className={classes.root}>
 					<Grid container spacing={2} >
 
 						{
-							this.state.userMedia.map(((user, index) => {
+							userMedia.map(((user, index) => {
 								let text = user.caption.text.split("#");
 								let caption = text[0];
 								let hashtags = text.splice(1);
