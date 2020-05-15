@@ -32,11 +32,6 @@ const useStyles = theme => ({
 	root: {
 		marginTop: '2rem'
 	},
-	paper: {
-		padding: theme.spacing(2),
-		textAlign: 'center',
-		color: theme.palette.text.secondary,
-	},
 	media: {
 		height: 0,
 		width: '100%',
@@ -69,6 +64,10 @@ const useStyles = theme => ({
 	},
 	mb16: {
 		marginBottom: '16px'
+	},
+	mbt: {
+		marginTop: "-16px",
+		marginBottom: "16px"
 	}
 });
 
@@ -101,6 +100,7 @@ class Profile extends Component {
 			isOpen: false
 		})
 	}
+
 	addFavorite = (id) => {
 		let items = updateFavoriteItem(this.state.userMedia, id);
 		this.setState({
@@ -114,23 +114,18 @@ class Profile extends Component {
 			comment: comment,
 			selectedUserId: id
 		});
-
 	}
 
 	addCommentHandler = (id) => {
-
 		let { comment } = this.state;
 		if (comment.trim() === '') {
 			return;
 		}
-
 		let items = pushComments(this.state.userMedia, id, comment);
-
 		this.setState({
 			comment: "",
 			userMedia: items
 		});
-
 	}
 
 	componentWillMount() {
@@ -149,45 +144,16 @@ class Profile extends Component {
 		this.setState({ userProfile: data })
 	}
 
-	addFavorite = (id) => {
-		let items = this.state.userMedia.map((item) => {
-			let modifiedItem = item;
-
-			if (!modifiedItem.hasOwnProperty('isFavorite')) {
-				modifiedItem.isFavorite = false;
-			}
-
-			if (modifiedItem.id === id) {
-				modifiedItem.isFavorite = !modifiedItem.isFavorite;
-				modifiedItem.isFavorite ? ++modifiedItem.likes.count : --modifiedItem.likes.count;
-			}
-			return modifiedItem;
-		});
-		this.setState({
-			userMedia: items
-		});
-	}
-
 	onChangeHandler = (e, id) => {
 		let comment = e.target.value;
 		this.setState({
 			comment: comment,
 			selectedUserId: id
 		});
-
 	}
 
 	onSearchHandler = (e) => {
-		let searchText = e.target.value
-		let filterMatchedItems = this.state.userMedia.filter((item) => {
-			return item.caption.text.indexOf(searchText) !== -1;
-		});
-		this.setState({
-			userMedia: filterMatchedItems
-		});
-		if (searchText === '') {
-			this.loadUserMedia();
-		}
+
 	}
 
 	showViewHandler = (user) => {
@@ -196,6 +162,7 @@ class Profile extends Component {
 			isOpen: true
 		});
 	}
+
 	render() {
 		const { classes, history } = this.props;
 		let { commentRequired, selectedUserId, userProfile, selectedUser, isOpen } = this.state;
@@ -210,7 +177,7 @@ class Profile extends Component {
 			text = selectedUser.caption.text.split("#");
 			caption = text[0];
 			hashtags = text.splice(1);
-			var { comments, user: { username }, created_time } = user;
+			var { comments, user: { username } } = user;
 		}
 		if (!profile_picture) {
 			return <div>Loading....</div>
@@ -223,12 +190,12 @@ class Profile extends Component {
 				<Container className={classes.root}>
 					{userProfile && <ProfileHeader userProfile={userProfile} />}
 
-					<Grid container spacing={2}>
+					<Grid container spacing={2} className={classes.root}>
 
 						{
 							this.state.userMedia.map(((user, index) => {
 								return (<Grid item xs={12} sm={4} key={user.id} onClick={this.showViewHandler.bind(this, user)}>
-									<Card className={classes.root}>
+									<Card>
 										<CardMedia
 											className={classes.media}
 											image={user.images.standard_resolution.url}
@@ -244,11 +211,11 @@ class Profile extends Component {
 					<Modal ariaHideApp={false} isOpen={isOpen} contentLabel="Login" onRequestClose={this.closeModal} style={customStyles}>
 						<Grid container spacing={3}>
 							<Grid item xs={12} sm={6}>
-								<img src={selectedUser.images.standard_resolution.url} width="100%" alt="selected user" />
+								<img src={selectedUser.images.standard_resolution.url} width="100%" height="100%" alt={caption} />
 
 							</Grid>
 							<Grid item xs={12} sm={6}>
-								<Card className={classes.root}>
+								<Card>
 									<CardHeader
 										avatar={
 											<Avatar aria-label="recipe" className={classes.avatar}>
@@ -256,10 +223,10 @@ class Profile extends Component {
 											</Avatar>
 										}
 										title={username}
-										subheader={(parseInt(created_time))}
 									/>
 
 									<CardContent>
+										<hr className={classes.mbt} />
 										<Typography variant="body2" component="p">
 											{caption}
 										</Typography>

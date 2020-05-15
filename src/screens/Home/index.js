@@ -14,6 +14,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { FormControl, InputLabel, Input, FormHelperText, Button } from '@material-ui/core';
 import { fetchUserMedia } from './../../api';
+import { updateFavoriteItem, pushComments } from './../../utils';
 
 const useStyles = theme => ({
 	root: {
@@ -82,19 +83,7 @@ class Home extends Component {
 	}
 
 	addFavorite = (id) => {
-		let items = this.state.userMedia.map((item) => {
-			let modifiedItem = item;
-
-			if (!modifiedItem.hasOwnProperty('isFavorite')) {
-				modifiedItem.isFavorite = false;
-			}
-
-			if (modifiedItem.id === id) {
-				modifiedItem.isFavorite = !modifiedItem.isFavorite;
-				modifiedItem.isFavorite ? ++modifiedItem.likes.count : --modifiedItem.likes.count;
-			}
-			return modifiedItem;
-		});
+		let items = updateFavoriteItem(this.state.userMedia, id);
 		this.setState({
 			userMedia: items
 		});
@@ -123,28 +112,15 @@ class Home extends Component {
 	}
 
 	addCommentHandler = (id) => {
-
 		let { comment } = this.state;
 		if (comment.trim() === '') {
 			return;
 		}
-
-		let items = this.state.userMedia.map((item) => {
-			let modifiedItem = item;
-			let comments = { ...item.comments };
-			if (modifiedItem.id === id) {
-				comments.values = comments.values || [];
-				comments.values.push(comment);
-				modifiedItem.comments = comments;
-			}
-			return modifiedItem;
-		});
-
+		let items = pushComments(this.state.userMedia, id, comment);
 		this.setState({
 			comment: "",
 			userMedia: items
 		});
-
 	}
 
 	timeConverter = (UNIX_timestamp) => {
