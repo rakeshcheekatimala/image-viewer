@@ -1,0 +1,43 @@
+.round__image {
+	border-radius: 50%;
+	border: 2px solid gray;
+}
+
+.profile__header {
+	display: flex;
+}
+
+.profile__header__info {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	margin-left: 1rem;
+	padding: 1rem;
+}
+
+.profile__header__info h6{
+	margin-bottom: 1rem;
+}
+
+.profile__header__followers{
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 1rem;
+}
+
+.profile__header__followers > span {
+	flex-grow: 1;
+	display: block;
+}
+
+.edit__icon {
+	display: flex;
+	align-items: center;
+}
+
+@media only screen and (min-width:768px) {
+	.profile__header__info {
+		flex-grow: 0;
+		width:60%;
+	}
+}
