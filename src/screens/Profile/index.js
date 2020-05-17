@@ -251,7 +251,7 @@ class Profile extends Component {
 										{
 											comments.values && comments.values.map((comment, index) => {
 												return (<Typography variant="body2" component="p" key={comment + index + selectedUser.id} className={classes.mb16}>
-													{username}: &nbsp; {comment}
+													<b>{username}</b>: &nbsp; {comment}
 												</Typography>)
 											})
 										}
