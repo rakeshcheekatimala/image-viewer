@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardContent, Button, withStyles, Input, InputLabel, FormControl, FormHelperText } from '@material-ui/core';
+import { Card, CardContent, Button, withStyles, Input, InputLabel, FormControl, FormHelperText, Typography } from '@material-ui/core';
 import { Header } from './../../components';
 import styles from './styles.module.css';
 
@@ -74,6 +74,10 @@ class Login extends Component {
 				<div className={styles.login}>
 					<Card className={classes.card}>
 						<CardContent className={classes.card__content}>
+							<Typography gutterBottom variant="h5" component="h2">
+								LOGIN
+          		</Typography>
+							<br />
 							<FormControl required>
 								<InputLabel htmlFor="username"> Username </InputLabel>
 								<Input id="username" type="text" username={username} onChange={this.inputUsernameChangeHandler} />
