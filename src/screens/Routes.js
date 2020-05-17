@@ -4,7 +4,7 @@ import {
 	Switch,
 	Route
 } from "react-router-dom";
-import { Home, Login } from './index';
+import { Home, Login, Profile } from './index';
 import PrivateRoute from './../common/PrivateRoute';
 
 const Routes = (props) => {
@@ -16,6 +16,7 @@ const Routes = (props) => {
 
 				</Route>
 				<PrivateRoute component={Home} path="/home" />
+				<PrivateRoute component={Profile} path="/profile" />
 			</Switch>
 		</Router>
 	)

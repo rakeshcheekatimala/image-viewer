@@ -4,6 +4,7 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import Avatar from '@material-ui/core/Avatar';
 import { userLogout } from './../../common/utils';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -66,7 +67,11 @@ const useStyles = makeStyles((theme) => ({
 	avatar: {
 		width: '35px',
 		height: '35px'
+	},
+	drawLine: {
+		margin: '0.1rem 1rem'
 	}
+
 }));
 
 export default function LoggedInHeader(props) {
@@ -95,7 +100,7 @@ export default function LoggedInHeader(props) {
 					<Typography className={classes.title} variant="h6" noWrap>
 						Image Viewer
           </Typography>
-					<div className={classes.search}>
+					{props.showSearchBar ? (<div className={classes.search}>
 						<div className={classes.searchIcon}>
 							<SearchIcon />
 						</div>
@@ -108,7 +113,7 @@ export default function LoggedInHeader(props) {
 							inputProps={{ 'aria-label': 'search' }}
 							onChange={props.onSearchHandler}
 						/>
-					</div>
+					</div>) : null}
 
 					<div>
 						<IconButton
@@ -137,13 +142,14 @@ export default function LoggedInHeader(props) {
 							open={open}
 							onClose={handleClose}
 						>
-							<MenuItem onClick={handleClose}>Profile</MenuItem>
+							<MenuItem onClick={handleClose}><Link to="/profile" style={{ textDecoration: 'none' }}>My Account</Link></MenuItem>
+							<hr className={classes.drawLine} />
 							<MenuItem onClick={handleLogout}>Logout</MenuItem>
 						</Menu>
 					</div>
 
 				</Toolbar>
 			</AppBar>
-		</div>
+		</div >
 	);
 }
