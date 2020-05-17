@@ -148,7 +148,7 @@ class Home extends Component {
 		}
 		return (
 			<div>
-				<LoggedInHeader profile_picture={profile_picture} history={history} onSearchHandler={this.onSearchHandler.bind(this)} />
+				<LoggedInHeader profile_picture={profile_picture} history={history} onSearchHandler={this.onSearchHandler.bind(this)} showSearchBar={true} />
 				<Container className={classes.root}>
 					<Grid container spacing={2} >
 
@@ -202,7 +202,7 @@ class Home extends Component {
 											{
 												comments.values && comments.values.map((comment, index) => {
 													return (<Typography variant="body2" component="p" key={comment + index + user.id} className={classes.mb16}>
-														{username}: &nbsp; {comment}
+														<b>{username}</b>: &nbsp; {comment}
 													</Typography>)
 												})
 											}
