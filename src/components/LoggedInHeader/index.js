@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
 		[theme.breakpoints.up('sm')]: {
 			display: 'block',
 		},
+		fontSize: '18px'
 	},
 	appbar: {
 		backgroundColor: '#263238'
@@ -97,9 +98,11 @@ export default function LoggedInHeader(props) {
 		<div className={classes.root}>
 			<AppBar position="static" className={classes.appbar}>
 				<Toolbar>
+
 					<Typography className={classes.title} variant="h6" noWrap>
-						Image Viewer
-          </Typography>
+						<Link to="/home" style={{ textDecoration: 'none', color: "#fff" }}>Image Viewer</Link>
+					</Typography>
+
 					{props.showSearchBar ? (<div className={classes.search}>
 						<div className={classes.searchIcon}>
 							<SearchIcon />
