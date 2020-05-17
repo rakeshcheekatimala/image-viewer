@@ -27,9 +27,9 @@ const useStyles = makeStyles((theme) => ({
 	search: {
 		position: 'relative',
 		borderRadius: theme.shape.borderRadius,
-		backgroundColor: fade(theme.palette.common.white, 0.15),
+		backgroundColor: fade('#c0c0c0', 0.15),
 		'&:hover': {
-			backgroundColor: fade(theme.palette.common.white, 0.25),
+			backgroundColor: fade('#c0c0c0', 0.25),
 		},
 		marginLeft: 0,
 		width: '100%',
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 		pointerEvents: 'none',
 		display: 'flex',
 		alignItems: 'center',
-		justifyContent: 'center',
+		justifyContent: 'center'
 	},
 	inputRoot: {
 		color: 'inherit',
