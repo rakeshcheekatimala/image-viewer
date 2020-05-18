@@ -177,9 +177,11 @@ class Home extends Component {
 												image={user.images.standard_resolution.url}
 												title="Paella dish"
 											/>
+											<br />
 											<Typography variant="body2" component="p">
 												{caption}
 											</Typography>
+											<br />
 											{
 												hashtags.map((value) => {
 													return (<Typography key={"hashtag" + value} variant="body2" component="span" className={classes.hashtag}>
@@ -196,7 +198,6 @@ class Home extends Component {
 											<Typography variant="body2" component="p">
 												{user.likes.count} likes
 											</Typography>
-											<br />
 										</CardActions>
 										<CardContent>
 											{
