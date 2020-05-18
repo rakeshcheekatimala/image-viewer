@@ -5,8 +5,8 @@ You can find the most recent version of this guide [here](https://github.com/fac
 
 ## USERNAME & PASSWORD for the application
 
-- <username> : upgrad123
-- <password>:  upgrad123
+- username : upgrad123
+- password:  upgrad123
 
 # REACT WARNINGS related to component life cycle can be ignored  (The Evaluation note)
 Since we are using the new version and life cycle methods are deprecated 
